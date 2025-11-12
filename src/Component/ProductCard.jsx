@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthProvider'; // adjust path if needed
 
 export default function ProductCard({ cards }) {
   const { productName, originCountry, price, rating, availableQuantity, productImage, id } = cards;
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [exported, setExported] = useState(false);
   const [imported, setImported] = useState(false);
@@ -31,6 +34,15 @@ export default function ProductCard({ cards }) {
     setImported(true);
   };
 
+  const handleSeeDetails = () => {
+    if (user) {
+      navigate(`/productdetails/${id}`);
+    } else {
+      alert('Please login first to see product details!');
+      navigate('/auth/login');
+    }
+  };
+
   return (
     <div className="p-4 w-full mx-auto sm:w-80 md:w-72 lg:w-80">
       <div className="card bg-base-100 shadow-md hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 ease-in-out rounded-lg">
@@ -50,7 +62,9 @@ export default function ProductCard({ cards }) {
           <div className="card-actions justify-around mt-2">
             <button
               onClick={handleImport}
-              className={`btn btn-primary btn-sm ${imported ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'hover:bg-white hover:text-black'}`}
+              className={`btn btn-primary btn-sm ${
+                imported ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'hover:bg-white hover:text-black'
+              }`}
               disabled={imported}
             >
               {imported ? 'Imported' : 'Import'}
@@ -58,17 +72,20 @@ export default function ProductCard({ cards }) {
 
             <button
               onClick={handleExport}
-              className={`btn btn-primary btn-sm ${exported ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'hover:bg-white hover:text-black'}`}
+              className={`btn btn-primary btn-sm ${
+                exported ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'hover:bg-white hover:text-black'
+              }`}
               disabled={exported}
             >
               {exported ? 'Exported' : 'Export'}
             </button>
 
-            <Link to={`/productdetails/${id}`}>
-              <button className="btn btn-secondary btn-sm hover:bg-white hover:text-black">
-                See Details
-              </button>
-            </Link>
+            <button
+              onClick={handleSeeDetails}
+              className="btn btn-secondary btn-sm hover:bg-white hover:text-black"
+            >
+              See Details
+            </button>
           </div>
         </div>
       </div>

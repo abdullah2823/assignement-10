@@ -1,32 +1,35 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleRegister = (e) => {
     e.preventDefault();
+    setError("");
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+    const form = e.target;
+    const name = form.name.value;
+    const photo = form.photo.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    const confirmPassword = form.confirmPassword.value;
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
       return;
     }
 
-    console.log("Registration Data:", formData);
-    // TODO: integrate with Firebase Auth
+    createUser(email, password)
+      .then(() => updateUserProfile({ displayName: name, photoURL: photo }))
+      .then(() => {
+        alert("Registration successful!");
+        navigate("/"); // Redirect to home
+      })
+      .catch((err) => setError(err.message));
   };
 
   return (
@@ -36,81 +39,63 @@ export default function Register() {
           Create a New Account
         </h2>
 
+        {error && <p className="text-red-500 text-center mb-3">{error}</p>}
+
         <form onSubmit={handleRegister} className="space-y-4">
-          {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Full Name
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Profile Photo URL</label>
+            <input
+              type="text"
+              name="photo"
+              placeholder="Enter image URL"
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Full Name</label>
             <input
               type="text"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
               placeholder="Name"
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              required
             />
           </div>
 
-          {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
               name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="example@email.com"
+              placeholder="Email"
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              required
             />
           </div>
 
-          {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                placeholder="••••••••"
-                className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500"
-              >
-                {showPassword ? "🙈" : "👁️"}
-              </button>
-            </div>
-          </div>
-
-          {/* Confirm Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Password</label>
             <input
-              type={showPassword ? "text" : "password"}
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
+              type="password"
+              name="password"
               placeholder="••••••••"
               className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              required
             />
           </div>
 
-          {/* Submit Button */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="••••••••"
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              required
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
@@ -121,7 +106,7 @@ export default function Register() {
 
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/auth/login" className="text-blue-600 hover:underline">
             Login
           </Link>
         </p>
