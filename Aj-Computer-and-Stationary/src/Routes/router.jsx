@@ -7,6 +7,9 @@ import MyImports from "../Pages/MyImports/MyImports";
 import MyExports from "../Pages/MyExports/MyExports";
 import AddExport from "../Pages/AddExports/AddExport";
 import ProductDetails from "../Pages/Productdetails/ProductDetails";
+import Login from "../Pages/Auth/Login";
+import Authlayout from "../Layout/Authlayout";
+import Register from "../Pages/Auth/Register";
 
 const router = createBrowserRouter([
   {
@@ -41,13 +44,24 @@ const router = createBrowserRouter([
   },
   {
     path: "/auth",
-    element: <h1>Authentication</h1>,
+    element: <Authlayout></Authlayout>,
+    children: [
+      {
+        path: "/auth/login", // ✅ সঠিক (relative path)
+        element: <Login></Login>,
+      },
+      {
+        path:"/auth/register",
+        element: <Register></Register>,
+      },
+    ],
   },
+
   {
     path: "/productdetails/:id",
     element: <ProductDetails />,
     loader: () => fetch("http://localhost:3000/products"),
-    
+
   },
   {
     path: "*",

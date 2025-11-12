@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLoaderData, useParams } from "react-router";
 import Navbar from "../../Component/Navbar";
-import Footer from "../../Component/footer";
+import Footer from "../../Component/Footer";
 
 export default function ProductDetails() {
   const allData = useLoaderData(); // assume array of products
@@ -19,16 +19,7 @@ export default function ProductDetails() {
     );
   }
 
-  const {
-    productName,
-    originCountry,
-    price,
-    rating,
-    availableQuantity,
-    productImage,
-    importDate,
-    description,
-  } = product;
+  const {productName,originCountry,price,rating,availableQuantity,productImage,importDate,description,} = product;
 
   return (
     <div className="bg-gray-100 min-h-screen gap-10">
@@ -36,7 +27,6 @@ export default function ProductDetails() {
 
       <div className="max-w-5xl mx-auto mt-10 bg-white shadow-lg rounded-xl overflow-hidden">
         <div className="md:flex">
-          {/* Product Image */}
           <div className="md:w-1/2">
             <img
               src={productImage}
@@ -45,7 +35,6 @@ export default function ProductDetails() {
             />
           </div>
 
-          {/* Product Details */}
           <div className="md:w-1/2 p-6 flex flex-col justify-between">
             <div>
               <h2 className="text-3xl font-bold text-gray-800 mb-4">{productName}</h2>
