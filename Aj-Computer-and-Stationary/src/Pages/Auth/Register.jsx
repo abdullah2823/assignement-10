@@ -27,7 +27,7 @@ export default function Register() {
       .then(() => updateUserProfile({ displayName: name, photoURL: photo }))
       .then(() => {
         alert("Registration successful!");
-        navigate("/"); // Redirect to home
+        navigate("/"); 
       })
       .catch((err) => setError(err.message));
   };

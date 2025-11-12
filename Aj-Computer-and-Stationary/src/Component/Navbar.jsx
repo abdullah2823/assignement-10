@@ -52,7 +52,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Center menu for large screens */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li><Link to="/">Home</Link></li>
@@ -63,7 +62,6 @@ export default function Navbar() {
         </ul>
       </div>
 
-      {/* Right side login/profile */}
       <div className="navbar-end">
         {!user ? (
           <Link

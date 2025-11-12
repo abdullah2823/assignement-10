@@ -4,7 +4,7 @@ import Navbar from "../../Component/Navbar";
 import Footer from "../../Component/Footer";
 
 export default function ProductDetails() {
-  const allData = useLoaderData(); // assume array of products
+  const allData = useLoaderData(); 
   const { id } = useParams();
 
   const product = allData.find((p) => p.id === Number(id));
@@ -56,13 +56,11 @@ export default function ProductDetails() {
                 {new Date(importDate).toLocaleDateString()}
               </p>
 
-              {/* Description Section */}
               <div className="mt-4">
                 <h3 className="text-xl font-semibold mb-2">Product Description</h3>
                 <p className="text-gray-700 mb-4">{description}</p>
               </div>
 
-              {/* Additional Details */}
               <div className="mt-4">
                 <h3 className="text-xl font-semibold mb-2">Details</h3>
                 <ul className="text-gray-700 list-disc list-inside">
@@ -74,7 +72,6 @@ export default function ProductDetails() {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col gap-3 mt-6">
               <button className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">
                 Add to Cart

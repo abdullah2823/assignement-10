@@ -18,7 +18,7 @@ export default function Login() {
     logIn(email, password)
       .then(() => {
         alert("Login successful!");
-        navigate("/"); // Redirect to home
+        navigate("/"); 
       })
       .catch((err) => setError(err.message));
   };
